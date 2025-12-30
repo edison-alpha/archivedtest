@@ -30,7 +30,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-6 text-xl font-extrabold">
+        <div className="mt-20 flex flex-col gap-6 text-xl font-extrabold">
           <button 
             onClick={() => onNavigate('detail')}
             className="brutalist-btn bg-[#FACC15] text-black px-8 py-4 rounded-full flex items-center gap-3 w-fit hover:scale-105 transition-transform"
