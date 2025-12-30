@@ -69,7 +69,7 @@ export const AuthPages: React.FC<AuthPagesProps> = ({ type, onBack, onToggle, on
 
         <div className="bg-black/20 p-6 rounded-2xl border-2 border-white/10 z-10 backdrop-blur-sm">
           <p className="text-white text-base font-medium italic mb-4 leading-snug">
-            "Before archived.test, I was stuck at 6.0 for two years. One month of their writing intensive and I hit a 7.5."
+            "Before Achieved.test, I was stuck at 6.0 for two years. One month of their writing intensive and I hit a 7.5."
           </p>
           <div className="flex items-center gap-3">
             <img src="https://i.pravatar.cc/100?u=success_story" className="w-11 h-11 rounded-full border-2 border-white" alt="Student" />

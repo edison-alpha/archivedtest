@@ -23,12 +23,12 @@ export const GlobalingoLogo: React.FC<LogoProps> = ({
     <div className={`flex items-center gap-2 ${className}`}>
       <img 
         src={archivedLogo} 
-        alt="Archived Test Logo" 
+        alt="Achieved Test Logo" 
         className="h-12 w-auto"
       />
       {showText && (
         <span className={`font-bold tracking-tight ${textColor}`}>
-          <span className="text-3xl">Archived</span><span className="text-base text-[#1B79A8]">.test</span>
+          <span className="text-3xl">Achieved</span><span className="text-base text-[#1B79A8]">.test</span>
         </span>
       )}
     </div>

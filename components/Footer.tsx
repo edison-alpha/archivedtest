@@ -5,7 +5,7 @@ import { GlobalingoLogo } from './Branding';
 export const Footer: React.FC = () => {
   const links = [
     {
-      title: "ARCHIVED.TEST",
+      title: "ACHIEVED.TEST",
       items: ["ABOUT US", "EXPERT TEAM", "CAREERS", "AFFILIATES", "PRIVACY"]
     },
     {
@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
             <GlobalingoLogo variant="white" className="h-10" showText={true} />
           </div>
           <p className="text-gray-500 text-[10px] mb-8 leading-relaxed">
-            © 2025 Archived.test. Empowering students globally to master high-stakes English exams. Not affiliated with IDP or British Council.
+            © 2025 Achieved.test. Empowering students globally to master high-stakes English exams. Not affiliated with IDP or British Council.
           </p>
           <div className="flex gap-3">
              {/* Social Icons */}
