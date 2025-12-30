@@ -1,4 +1,5 @@
 import React from 'react';
+import archivedLogo from '../archived.png';
 
 interface LogoProps {
   variant?: 'default' | 'white' | 'dark' | 'color-accent';
@@ -21,7 +22,7 @@ export const GlobalingoLogo: React.FC<LogoProps> = ({
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <img 
-        src="./archived.png" 
+        src={archivedLogo} 
         alt="Archived Test Logo" 
         className="h-12 w-auto"
       />
