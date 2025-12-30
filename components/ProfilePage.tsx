@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserData } from '../App';
+import defaultAvatar from '../src/founder.png';
 
 interface ProfilePageProps {
   user: UserData;
@@ -20,7 +21,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user, onBack }) => {
             <div className="bg-white p-8 rounded-3xl border-3 border-black shadow-[5px_5px_0px_#000] text-center">
               <div className="relative inline-block mb-6">
                 <img 
-                  src={`https://i.pravatar.cc/300?u=${user.email}`} 
+                  src={defaultAvatar} 
                   className="w-32 h-32 rounded-full border-3 border-black shadow-[5px_5px_0px_#2563EB]"
                   alt={user.name}
                 />

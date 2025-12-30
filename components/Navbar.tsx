@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ViewState, UserData } from '../App';
 import { GlobalingoLogo } from './Branding';
+import defaultAvatar from '../src/founder.png';
 
 interface NavbarProps {
   onNavigate: (view: ViewState) => void;
@@ -127,7 +128,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
                   <div className="text-xs font-bold truncate max-w-[100px]">{user?.name}</div>
                 </div>
                 <img
-                  src={`https://i.pravatar.cc/100?u=${user?.email}`}
+                  src={defaultAvatar}
                   className="w-10 h-10 rounded-full border-2 border-black"
                   alt="Profile"
                 />
