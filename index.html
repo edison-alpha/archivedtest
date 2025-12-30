@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Globalingo | Master the Test, Reach the World</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --brand-red: #E11D48;
+        --brand-blue: #2563EB;
+        --brand-yellow: #FACC15;
+        --brand-green: #059669;
+        --ink: #000000;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #FEFCE8;
+        color: var(--ink);
+        overflow-x: hidden;
+      }
+      
+      /* Neo-Brutalist Utility */
+      .brutalist-card {
+        background: white;
+        border: 3px solid var(--ink);
+        box-shadow: 8px 8px 0px 0px var(--ink);
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .brutalist-card:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0px 0px var(--ink);
+      }
+      
+      .brutalist-btn {
+        border: 3px solid var(--ink);
+        box-shadow: 4px 4px 0px 0px var(--ink);
+        transition: all 0.1s ease;
+      }
+      .brutalist-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0px 0px 0px 0px var(--ink);
+      }
+
+      /* Custom Minimal Scrollbar */
+      .custom-scrollbar::-webkit-scrollbar {
+        height: 4px;
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #000;
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: var(--brand-blue);
+      }
+
+      /* Animations */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-up {
+        animation: fadeUp 0.6s ease-out forwards;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(-1deg); }
+        50% { transform: translateY(-10px) rotate(1deg); }
+      }
+      .animate-float {
+        animation: float 4s ease-in-out infinite;
+      }
+
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+      .animate-marquee {
+        display: flex;
+        width: max-content;
+        animation: marquee 20s linear infinite;
+      }
+
+      .reveal {
+        opacity: 0;
+      }
+      .reveal.active {
+        animation: fadeUp 0.8s ease-out forwards;
+      }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const observerOptions = { threshold: 0.1 };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, observerOptions);
+
+      window.addEventListener('load', () => {
+        document.querySelectorAll('section, .reveal-item').forEach(el => {
+          el.classList.add('reveal');
+          observer.observe(el);
+        });
+      });
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
