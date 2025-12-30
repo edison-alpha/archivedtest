@@ -1,4 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+/* Mabry Pro Font Family */
+@font-face {
+  font-family: 'Mabry Pro';
+  src: url('./font/MabryPro-Light.woff2') format('woff2'),
+       url('./font/MabryPro-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mabry Pro';
+  src: url('./font/MabryPro-Regular.woff2') format('woff2'),
+       url('./font/MabryPro-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mabry Pro';
+  src: url('./font/MabryPro-Medium.woff2') format('woff2'),
+       url('./font/MabryPro-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mabry Pro';
+  src: url('./font/MabryPro-Bold.woff2') format('woff2'),
+       url('./font/MabryPro-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mabry Pro';
+  src: url('./font/MabryPro-Black.woff2') format('woff2'),
+       url('./font/MabryPro-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
 
 :root {
   --brand-red: #E11D48;
@@ -9,7 +48,7 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Mabry Pro', sans-serif;
   background-color: #FEFCE8;
   color: var(--ink);
   overflow-x: hidden;
