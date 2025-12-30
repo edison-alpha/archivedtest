@@ -26,20 +26,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onNavigate, 
           </div>
           <nav className="space-y-3">
             {[
-              { label: 'Overview', icon: '🏠', view: 'dashboard' as ViewState },
-              { label: 'Practice Tests', icon: '📝', view: 'all-tests' as ViewState },
-              { label: 'AI Simulation', icon: '🤖', view: 'ai-simulation' as ViewState },
-              { label: 'Tutors', icon: '🎓', view: 'tutors' as ViewState },
-              { label: 'Profile', icon: '👤', view: 'profile' as ViewState },
+              { label: 'Overview', icon: '🏠', view: 'dashboard' as ViewState, color: '#FACC15' },
+              { label: 'Practice Tests', icon: '📝', view: 'all-tests' as ViewState, color: '#2563EB' },
+              { label: 'AI Simulation', icon: '🤖', view: 'ai-simulation' as ViewState, color: '#E11D48' },
+              { label: 'Tutors', icon: '🎓', view: 'tutors' as ViewState, color: '#059669' },
+              { label: 'Profile', icon: '👤', view: 'profile' as ViewState, color: '#8B5CF6' },
             ].map((item) => (
               <button
                 key={item.label}
                 onClick={() => onNavigate(item.view)}
-                className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider transition-all border-2 border-black ${
-                  item.label === 'Overview' 
-                    ? 'bg-[#FACC15] shadow-[4px_4px_0px_#000] -translate-y-0.5' 
-                    : 'bg-white hover:bg-gray-50'
-                }`}
+                className="w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider transition-all border-2 border-black bg-white hover:shadow-[4px_4px_0px_#000] hover:-translate-y-0.5 hover:-translate-x-0.5"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = item.color;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white';
+                }}
               >
                 <span className="text-xl">{item.icon}</span> {item.label}
               </button>

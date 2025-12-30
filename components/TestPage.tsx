@@ -22,6 +22,16 @@ export const TestPage: React.FC<TestPageProps> = ({ test, onExit, onFinish }) =>
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
   
+  // Speaking recording states
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [audioURL, setAudioURL] = useState<string | null>(null);
+  const [audioLevels, setAudioLevels] = useState<number[]>(Array(12).fill(5));
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  
   const navRef = useRef<HTMLDivElement>(null);
   const activeBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -47,6 +57,88 @@ export const TestPage: React.FC<TestPageProps> = ({ test, onExit, onFinish }) =>
     }
     return () => clearInterval(interval);
   }, [isListening, isAudioPlaying]);
+
+  // Recording timer
+  useEffect(() => {
+    let interval: any;
+    if (isRecording) {
+      interval = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRecording]);
+
+  // Start recording function
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Setup audio analyser for visualizer
+      const audioContext = new AudioContext();
+      const source = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 32;
+      source.connect(analyser);
+      analyserRef.current = analyser;
+
+      // Start visualizer animation
+      const updateLevels = () => {
+        if (analyserRef.current) {
+          const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+          analyserRef.current.getByteFrequencyData(dataArray);
+          const levels = Array.from(dataArray.slice(0, 12)).map(v => Math.max(5, (v / 255) * 100));
+          setAudioLevels(levels);
+        }
+        animationFrameRef.current = requestAnimationFrame(updateLevels);
+      };
+      updateLevels();
+
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const url = URL.createObjectURL(audioBlob);
+        setAudioURL(url);
+        stream.getTracks().forEach(track => track.stop());
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+        setAudioLevels(Array(12).fill(5));
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      setRecordingTime(0);
+      setAudioURL(null);
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+      alert('Unable to access microphone. Please allow microphone permission.');
+    }
+  };
+
+  // Stop recording function
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  // Format recording time
+  const formatRecordingTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
   // Load Progress
   useEffect(() => {
@@ -256,17 +348,133 @@ export const TestPage: React.FC<TestPageProps> = ({ test, onExit, onFinish }) =>
 
             {isSpeaking && (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-8 animate-fade-up">
-                <div className="bg-white border-4 border-black p-3 rounded-3xl shadow-[6px_6px_0px_#000]">
-                  <img src="https://i.pravatar.cc/200?u=examiner_sarah" className="w-28 h-28 rounded-2xl border-2 border-black grayscale" alt="Examiner" />
+                {/* Examiner Avatar with Recording Indicator */}
+                <div className="relative">
+                  <div className={`bg-white border-4 border-black p-3 rounded-3xl shadow-[6px_6px_0px_${isRecording ? '#E11D48' : '#000'}] transition-all`}>
+                    <img src="https://i.pravatar.cc/200?u=examiner_sarah" className="w-28 h-28 rounded-2xl border-2 border-black grayscale" alt="Examiner" />
+                  </div>
+                  {isRecording && (
+                    <div className="absolute -top-2 -right-2 bg-red-600 text-white px-3 py-1 rounded-full text-[9px] font-black border-2 border-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      LIVE
+                    </div>
+                  )}
                 </div>
+
                 <div className="space-y-5 w-full max-w-sm">
+                  {/* Speaking Prompt Card */}
                   <div className="bg-[#FEFCE8] p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#FACC15]">
                     <h3 className="text-red-600 font-black text-[9px] uppercase tracking-widest mb-2">Speaking Prompt</h3>
                     <p className="text-sm font-bold text-black leading-snug italic">"Describe a tradition in your culture that you particularly enjoy. Why is it significant?"</p>
                   </div>
-                  <button className="w-full bg-red-600 text-white py-3 rounded-lg font-black text-sm border-2 border-black shadow-[4px_4px_0px_#000] flex items-center justify-center gap-2">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div> START RECORDING
+                  
+                  {/* Audio Visualizer */}
+                  {isRecording && (
+                    <div className="bg-[#1F1F1F] p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#E11D48]">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
+                          <span className="text-red-500 font-black text-[10px] uppercase tracking-widest">Recording</span>
+                        </div>
+                        <span className="text-white font-black text-lg font-mono">{formatRecordingTime(recordingTime)}</span>
+                      </div>
+                      
+                      {/* Visualizer Bars */}
+                      <div className="flex items-end justify-center gap-1.5 h-20 bg-black/30 rounded-xl p-3">
+                        {audioLevels.map((level, i) => (
+                          <div 
+                            key={i}
+                            className="w-3 bg-gradient-to-t from-red-600 to-red-400 rounded-full transition-all duration-75"
+                            style={{ height: `${level}%`, minHeight: '8px' }}
+                          ></div>
+                        ))}
+                      </div>
+                      
+                      <p className="text-white/40 font-bold text-[9px] mt-4 uppercase tracking-wider">Speak clearly into your microphone</p>
+                    </div>
+                  )}
+
+                  {/* Playback Section */}
+                  {audioURL && !isRecording && (
+                    <div className="bg-[#1F1F1F] p-6 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#059669]">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full"></div>
+                          <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest">Recording Complete</span>
+                        </div>
+                        <span className="text-white/60 font-black text-xs font-mono bg-white/10 px-2 py-1 rounded">{formatRecordingTime(recordingTime)}</span>
+                      </div>
+                      
+                      {/* Custom Audio Player */}
+                      <div className="bg-black/40 rounded-xl p-4 space-y-3">
+                        <div className="flex items-center gap-3">
+                          <button 
+                            onClick={(e) => {
+                              const audio = e.currentTarget.parentElement?.parentElement?.querySelector('audio') as HTMLAudioElement;
+                              if (audio) {
+                                if (audio.paused) audio.play();
+                                else audio.pause();
+                              }
+                            }}
+                            className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_#000] hover:bg-emerald-400 transition-colors"
+                          >
+                            <span className="text-white text-sm ml-0.5">▶</span>
+                          </button>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-1 h-8">
+                              {[...Array(20)].map((_, i) => (
+                                <div 
+                                  key={i}
+                                  className="flex-1 bg-emerald-500/60 rounded-full"
+                                  style={{ height: `${Math.random() * 60 + 20}%` }}
+                                ></div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <audio src={audioURL} className="hidden" />
+                      </div>
+                      
+                      <p className="text-white/30 font-bold text-[9px] mt-4 uppercase tracking-wider text-center">Click play to review your response</p>
+                    </div>
+                  )}
+
+                  {/* Record Button */}
+                  <button 
+                    onClick={isRecording ? stopRecording : startRecording}
+                    className={`w-full py-4 rounded-xl font-black text-sm border-2 border-black flex items-center justify-center gap-3 transition-all ${
+                      isRecording 
+                        ? 'bg-white text-red-600 shadow-none hover:bg-gray-50' 
+                        : 'bg-red-600 text-white shadow-[4px_4px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#000]'
+                    }`}
+                  >
+                    {isRecording ? (
+                      <>
+                        <div className="w-4 h-4 bg-red-600 rounded"></div>
+                        STOP RECORDING
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                        START RECORDING
+                      </>
+                    )}
                   </button>
+
+                  {/* Re-record Button */}
+                  {audioURL && !isRecording && (
+                    <button 
+                      onClick={startRecording}
+                      className="w-full py-3 rounded-xl font-black text-xs border-2 border-black bg-[#FEFCE8] text-black hover:bg-yellow-100 transition-all shadow-[3px_3px_0px_#000] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]"
+                    >
+                      🔄 RECORD AGAIN
+                    </button>
+                  )}
+
+                  {/* Tip */}
+                  {!isRecording && !audioURL && (
+                    <p className="text-white/30 font-black text-[9px] uppercase tracking-widest italic">Tip: Speak for 1-2 minutes for best results</p>
+                  )}
                 </div>
               </div>
             )}
@@ -299,7 +507,69 @@ export const TestPage: React.FC<TestPageProps> = ({ test, onExit, onFinish }) =>
         {/* Right Side: Interactive Area */}
         <div className="w-[55%] p-8 overflow-y-auto bg-[#F3F4F6]">
           <div className="max-w-md mx-auto h-full">
-            {!isWriting ? (
+            {/* Speaking Test - Tips & Guidelines */}
+            {isSpeaking ? (
+              <div className="space-y-6 animate-fade-up">
+                <div className="bg-white p-8 rounded-3xl border-2 border-black shadow-[10px_10px_0px_#E11D48]">
+                  <h3 className="font-black text-xl uppercase tracking-tighter mb-6 flex items-center gap-3">
+                    <span className="text-2xl">🎯</span> Speaking Tips
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex gap-3 p-4 bg-[#FEFCE8] rounded-xl border border-black">
+                      <span className="text-lg">💬</span>
+                      <div>
+                        <h4 className="font-black text-xs uppercase mb-1">Speak Naturally</h4>
+                        <p className="text-[11px] font-medium text-gray-600">Don't memorize scripts. Examiners can tell!</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 p-4 bg-[#FEFCE8] rounded-xl border border-black">
+                      <span className="text-lg">⏱️</span>
+                      <div>
+                        <h4 className="font-black text-xs uppercase mb-1">Time Management</h4>
+                        <p className="text-[11px] font-medium text-gray-600">Aim for 1-2 minutes per response.</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 p-4 bg-[#FEFCE8] rounded-xl border border-black">
+                      <span className="text-lg">📝</span>
+                      <div>
+                        <h4 className="font-black text-xs uppercase mb-1">Structure Your Answer</h4>
+                        <p className="text-[11px] font-medium text-gray-600">Introduction → Main points → Conclusion</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 p-4 bg-[#FEFCE8] rounded-xl border border-black">
+                      <span className="text-lg">🎭</span>
+                      <div>
+                        <h4 className="font-black text-xs uppercase mb-1">Use Examples</h4>
+                        <p className="text-[11px] font-medium text-gray-600">Personal stories make your answer memorable.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Scoring Criteria */}
+                <div className="bg-[#1F1F1F] p-6 rounded-2xl border-2 border-black shadow-[6px_6px_0px_#000]">
+                  <h4 className="text-white font-black text-sm uppercase tracking-wider mb-4">Scoring Criteria</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-white/10 p-3 rounded-lg">
+                      <div className="text-[#FACC15] font-black text-[10px] uppercase">Fluency</div>
+                      <div className="text-white/60 text-[9px] font-medium mt-1">Smooth delivery</div>
+                    </div>
+                    <div className="bg-white/10 p-3 rounded-lg">
+                      <div className="text-[#FACC15] font-black text-[10px] uppercase">Vocabulary</div>
+                      <div className="text-white/60 text-[9px] font-medium mt-1">Word variety</div>
+                    </div>
+                    <div className="bg-white/10 p-3 rounded-lg">
+                      <div className="text-[#FACC15] font-black text-[10px] uppercase">Grammar</div>
+                      <div className="text-white/60 text-[9px] font-medium mt-1">Sentence structure</div>
+                    </div>
+                    <div className="bg-white/10 p-3 rounded-lg">
+                      <div className="text-[#FACC15] font-black text-[10px] uppercase">Pronunciation</div>
+                      <div className="text-white/60 text-[9px] font-medium mt-1">Clear speech</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : !isWriting ? (
               <div className="space-y-6">
                 <div className="bg-white p-8 rounded-3xl border-2 border-black shadow-[10px_10px_0px_#000] relative">
                   <div className="flex justify-between items-start mb-6">
