@@ -71,8 +71,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
   const handleMouseLeave = () => setActiveDropdown(null);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#FEFCE8]">
-      <div className="py-4 px-6 md:px-12 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 bg-[#FEFCE8] px-6 md:px-12">
+      <div className="max-w-7xl mx-auto py-4 flex items-center justify-between">
         <div className="flex items-center">
           <button onClick={() => onNavigate('home')} className="hover:opacity-80 transition-opacity">
             <GlobalingoLogo variant="default" className="h-8" showText={true} />
@@ -82,27 +82,27 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
         <div className="hidden lg:flex items-center gap-8 text-[15px] font-bold uppercase tracking-wider text-black">
           <div className="relative" onMouseEnter={() => handleMouseEnter('programs')} onMouseLeave={handleMouseLeave}>
             <button className={`hover:opacity-60 transition-opacity ${activeDropdown === 'programs' ? 'opacity-60' : ''}`}>
-              Programs & Courses
+              PROGRAMS & COURSES
             </button>
           </div>
           <div className="relative" onMouseEnter={() => handleMouseEnter('community')} onMouseLeave={handleMouseLeave}>
             <button className={`hover:opacity-60 transition-opacity ${activeDropdown === 'community' ? 'opacity-60' : ''}`}>
-              Community
+              COMMUNITY
             </button>
           </div>
           <div className="relative" onMouseEnter={() => handleMouseEnter('resources')} onMouseLeave={handleMouseLeave}>
             <button className={`hover:opacity-60 transition-opacity ${activeDropdown === 'resources' ? 'opacity-60' : ''}`}>
-              Resources
+              RESOURCES
             </button>
           </div>
           <div className="relative" onMouseEnter={() => handleMouseEnter('pricing')} onMouseLeave={handleMouseLeave}>
             <button className={`hover:opacity-60 transition-opacity ${activeDropdown === 'pricing' ? 'opacity-60' : ''}`}>
-              Pricing
+              PRICING
             </button>
           </div>
           <div className="relative" onMouseEnter={() => handleMouseEnter('about')} onMouseLeave={handleMouseLeave}>
             <button className={`hover:opacity-60 transition-opacity ${activeDropdown === 'about' ? 'opacity-60' : ''}`}>
-              About
+              ABOUT
             </button>
           </div>
         </div>
@@ -149,13 +149,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
 
       {/* Mega Dropdown - Programs & Courses */}
       <div
-        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-black/10 transition-all duration-200 ${activeDropdown === 'programs' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-b border-black transition-all duration-200 ${activeDropdown === 'programs' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onMouseEnter={() => handleMouseEnter('programs')}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="max-w-7xl mx-auto px-12 py-8 flex gap-12">
-          {/* Left Sidebar */}
-          <div className="w-48 flex flex-col gap-4">
+        <div className="max-w-7xl mx-auto px-12 py-8 flex">
+          {/* Left Sidebar with green background */}
+          <div className="w-56 flex flex-col gap-4 bg-[#C1E1C1] -ml-12 pl-12 pr-8 py-4 -my-8">
             {programsDropdown.sections.map((section, idx) => (
               <button
                 key={idx}
@@ -169,7 +169,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
           </div>
 
           {/* Courses Grid */}
-          <div className="flex-1 grid grid-cols-2 gap-x-12 gap-y-6">
+          <div className="flex-1 grid grid-cols-2 gap-x-12 gap-y-6 pl-12">
             {programsDropdown.courses.map((item, idx) => (
               <button
                 key={idx}
@@ -190,12 +190,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
 
       {/* Mega Dropdown - Resources */}
       <div
-        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-black/10 transition-all duration-200 ${activeDropdown === 'resources' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-b border-black transition-all duration-200 ${activeDropdown === 'resources' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onMouseEnter={() => handleMouseEnter('resources')}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="max-w-7xl mx-auto px-12 py-8">
-          <div className="grid grid-cols-2 gap-x-12 gap-y-6 max-w-3xl">
+        <div className="max-w-7xl mx-auto px-12 py-8 flex">
+          <div className="w-56 bg-[#C1E1C1] -ml-12 -my-8"></div>
+          <div className="flex-1 grid grid-cols-2 gap-x-12 gap-y-6 pl-12">
             {resourcesDropdown.map((item, idx) => (
               <button
                 key={idx}
@@ -216,12 +217,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
 
       {/* Mega Dropdown - Community */}
       <div
-        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-black/10 transition-all duration-200 ${activeDropdown === 'community' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-b border-black transition-all duration-200 ${activeDropdown === 'community' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onMouseEnter={() => handleMouseEnter('community')}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="max-w-7xl mx-auto px-12 py-8">
-          <div className="grid grid-cols-2 gap-x-12 gap-y-6 max-w-3xl">
+        <div className="max-w-7xl mx-auto px-12 py-8 flex">
+          <div className="w-56 bg-[#C1E1C1] -ml-12 -my-8"></div>
+          <div className="flex-1 grid grid-cols-2 gap-x-12 gap-y-6 pl-12">
             {communityDropdown.map((item, idx) => (
               <button
                 key={idx}
@@ -242,12 +244,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
 
       {/* Mega Dropdown - Pricing */}
       <div
-        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-black/10 transition-all duration-200 ${activeDropdown === 'pricing' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-b border-black transition-all duration-200 ${activeDropdown === 'pricing' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onMouseEnter={() => handleMouseEnter('pricing')}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="max-w-7xl mx-auto px-12 py-8">
-          <div className="grid grid-cols-2 gap-x-12 gap-y-6 max-w-3xl">
+        <div className="max-w-7xl mx-auto px-12 py-8 flex">
+          <div className="w-56 bg-[#C1E1C1] -ml-12 -my-8"></div>
+          <div className="flex-1 grid grid-cols-2 gap-x-12 gap-y-6 pl-12">
             {pricingDropdown.map((item, idx) => (
               <button
                 key={idx}
@@ -268,12 +271,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, isAuthenticated, use
 
       {/* Mega Dropdown - About */}
       <div
-        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-black/10 transition-all duration-200 ${activeDropdown === 'about' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`absolute left-0 w-full bg-[#FEFCE8] border-t border-b border-black transition-all duration-200 ${activeDropdown === 'about' ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         onMouseEnter={() => handleMouseEnter('about')}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="max-w-7xl mx-auto px-12 py-8">
-          <div className="grid grid-cols-2 gap-x-12 gap-y-6 max-w-3xl">
+        <div className="max-w-7xl mx-auto px-12 py-8 flex">
+          <div className="w-56 bg-[#C1E1C1] -ml-12 -my-8"></div>
+          <div className="flex-1 grid grid-cols-2 gap-x-12 gap-y-6 pl-12">
             {aboutDropdown.map((item, idx) => (
               <button
                 key={idx}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TestResult, ViewState } from '../App';
 
@@ -51,23 +50,23 @@ export const TestSummaryPage: React.FC<TestSummaryPageProps> = ({ result, onDash
   ].filter(r => r.visible);
 
   return (
-    <div className="min-h-screen bg-[#FEFCE8] py-20 px-6 md:px-12">
+    <div className="min-h-screen bg-[#FEFCE8] py-16 px-6 md:px-12">
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <div className="inline-block bg-[#059669] text-white px-6 py-2 rounded-full font-black text-sm border-4 border-black mb-6 shadow-[4px_4px_0px_#000] uppercase tracking-widest">
+        <div className="text-center mb-12">
+          <div className="inline-block bg-[#059669] text-white px-5 py-2 rounded-full font-bold text-sm border-2 border-black mb-5 shadow-[4px_4px_0px_#000] uppercase tracking-wider">
             {isAI ? 'AI SIMULATION DONE' : 'TEST COMPLETED'}
           </div>
-          <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-4 uppercase">Your <br/><span className="text-[#2563EB]">Results.</span></h1>
+          <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-none mb-3 uppercase">Your <span className="text-[#2563EB]">Results.</span></h1>
         </div>
 
         {/* AI FEEDBACK HERO */}
         {isAI && (
-          <div className="brutalist-card bg-white p-12 rounded-[50px] border-4 border-black shadow-[16px_16px_0px_#2563EB] mb-12 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-5">
-              <span className="text-9xl font-black italic">AI</span>
+          <div className="bg-white p-10 rounded-[32px] border-3 border-black shadow-[10px_10px_0px_#2563EB] mb-10 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-3 opacity-5">
+              <span className="text-8xl font-black italic">AI</span>
             </div>
-            <h3 className="text-4xl font-black uppercase italic mb-8 border-b-4 border-black inline-block relative z-10">AI Deep Dive Analysis</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+            <h3 className="text-3xl font-black uppercase italic mb-8 border-b-3 border-black inline-block relative z-10">AI Deep Dive Analysis</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
               {[
                 { label: "Lexical Resource", val: result.subScores?.vocabulary || 0, color: "#2563EB" },
                 { label: "Grammar Range", val: result.subScores?.grammar || 0, color: "#E11D48" },
@@ -76,18 +75,18 @@ export const TestSummaryPage: React.FC<TestSummaryPageProps> = ({ result, onDash
               ].map((s, i) => {
                 const level = getPerformanceLevel(s.val);
                 return (
-                  <div key={i} className="text-center space-y-3 group">
+                  <div key={i} className="text-center space-y-2 group">
                     <div className="flex flex-col items-center gap-1">
-                      <div className="text-4xl font-black flex items-center gap-2" style={{ color: s.color }}>
+                      <div className="text-3xl font-black flex items-center gap-2" style={{ color: s.color }}>
                         {s.val}%
-                        <span className="text-2xl group-hover:scale-125 transition-transform">{level.icon}</span>
+                        <span className="text-xl group-hover:scale-125 transition-transform">{level.icon}</span>
                       </div>
-                      <div className={`text-[9px] font-black px-2 py-0.5 rounded-full border-2 border-black ${level.bg} ${level.color}`}>
+                      <div className={`text-[9px] font-bold px-2 py-0.5 rounded-full border-2 border-black ${level.bg} ${level.color}`}>
                         {level.label}
                       </div>
                     </div>
-                    <div className="text-[10px] font-black uppercase tracking-widest opacity-60">{s.label}</div>
-                    <div className="w-full h-3 bg-gray-100 rounded-full border-2 border-black overflow-hidden shadow-[2px_2px_0px_#000]">
+                    <div className="text-[10px] font-bold uppercase tracking-wider opacity-60">{s.label}</div>
+                    <div className="w-full h-2.5 bg-gray-100 rounded-full border-2 border-black overflow-hidden">
                       <div className="h-full transition-all duration-1000 ease-out" style={{ width: `${s.val}%`, backgroundColor: s.color }}></div>
                     </div>
                   </div>
@@ -97,52 +96,52 @@ export const TestSummaryPage: React.FC<TestSummaryPageProps> = ({ result, onDash
           </div>
         )}
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid lg:grid-cols-3 gap-8 mb-10">
           {/* Main Score Card */}
           <div className="lg:col-span-1">
-            <div className="brutalist-card bg-white p-12 rounded-[40px] text-center h-full flex flex-col justify-center items-center border-[6px]">
-              <span className="font-black text-gray-400 uppercase tracking-widest text-xs mb-4">Estimated Band</span>
-              <div className="text-9xl font-black text-[#2563EB] mb-6 leading-none tracking-tighter italic">
+            <div className="bg-white p-10 rounded-[32px] border-3 border-black shadow-[6px_6px_0px_#000] text-center h-full flex flex-col justify-center items-center">
+              <span className="font-bold text-gray-400 uppercase tracking-wider text-xs mb-4">Estimated Band</span>
+              <div className="text-8xl font-black text-[#2563EB] mb-5 leading-none tracking-tighter italic">
                 {result.score}
               </div>
-              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden border-2 border-black mb-4">
+              <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden border-2 border-black mb-3">
                 <div 
                   className="h-full bg-[#2563EB]" 
                   style={{ width: `${(result.score / 9) * 100}%` }}
                 ></div>
               </div>
-              <span className="font-bold text-gray-500 text-sm">Target was 8.0</span>
+              <span className="font-medium text-gray-500 text-sm">Target was 8.0</span>
             </div>
           </div>
 
           {/* Detailed Stats */}
-          <div className="lg:col-span-2 grid md:grid-cols-2 gap-8">
-            <div className="brutalist-card bg-[#FACC15] p-10 rounded-[40px] border-4">
-              <h3 className="text-2xl font-black mb-6 uppercase tracking-tighter">Performance Stats</h3>
-              <div className="space-y-6">
+          <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
+            <div className="bg-[#FACC15] p-8 rounded-[28px] border-3 border-black shadow-[5px_5px_0px_#000]">
+              <h3 className="text-xl font-black mb-5 uppercase tracking-tighter">Performance Stats</h3>
+              <div className="space-y-5">
                 <div className="flex justify-between items-center border-b-2 border-black/10 pb-4">
-                  <span className="font-black text-xs uppercase opacity-60">Accuracy</span>
+                  <span className="font-bold text-xs uppercase opacity-60">Accuracy</span>
                   <span className="text-3xl font-black">{Math.round((result.correctAnswers / result.totalQuestions) * 100)}%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="font-black text-xs uppercase opacity-60">Time Elapsed</span>
+                  <span className="font-bold text-xs uppercase opacity-60">Time Elapsed</span>
                   <span className="text-3xl font-black">{result.timeSpent}</span>
                 </div>
               </div>
             </div>
 
-            <div className="brutalist-card bg-white p-10 rounded-[40px] border-4 flex flex-col">
-              <h3 className="text-2xl font-black mb-6 uppercase tracking-tighter">Expert Critique</h3>
-              <p className="text-xl font-bold italic leading-relaxed text-gray-700 flex-1">
+            <div className="bg-white p-8 rounded-[28px] border-3 border-black shadow-[5px_5px_0px_#000] flex flex-col">
+              <h3 className="text-xl font-black mb-5 uppercase tracking-tighter">Expert Critique</h3>
+              <p className="text-base font-medium italic leading-relaxed text-gray-700 flex-1">
                 "{getFeedback(result.score)}"
               </p>
-              <div className="mt-8 flex items-center gap-4 text-[#2563EB]">
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white text-xl font-black">
+              <div className="mt-5 flex items-center gap-4 text-[#2563EB]">
+                <div className="w-11 h-11 bg-black rounded-full flex items-center justify-center text-white text-base font-bold">
                   {isAI ? '🤖' : 'JS'}
                 </div>
                 <div>
-                  <div className="font-black text-xs uppercase">{isAI ? 'AI Evaluator v3.0' : 'Dr. Julian Sterling'}</div>
-                  <div className="font-bold text-[10px] uppercase opacity-50">Globalingo Examiner Team</div>
+                  <div className="font-bold text-xs uppercase">{isAI ? 'AI Evaluator v3.0' : 'Dr. Julian Sterling'}</div>
+                  <div className="font-medium text-[10px] uppercase opacity-50">Examiner Team</div>
                 </div>
               </div>
             </div>
@@ -150,18 +149,18 @@ export const TestSummaryPage: React.FC<TestSummaryPageProps> = ({ result, onDash
         </div>
 
         {/* Breakdown & Next Steps */}
-        <div className="grid md:grid-cols-2 gap-12 mb-20">
-          <div className="brutalist-card bg-[#1F1F1F] text-white p-12 rounded-[50px]">
-            <h3 className="text-3xl font-black mb-8 uppercase tracking-tighter border-b border-white/10 pb-4">Skill Benchmark</h3>
-            <div className="space-y-8 mt-4">
+        <div className="grid md:grid-cols-2 gap-10 mb-14">
+          <div className="bg-[#1F1F1F] text-white p-10 rounded-[32px] border-3 border-black shadow-[6px_6px_0px_#000]">
+            <h3 className="text-2xl font-black mb-8 uppercase tracking-tighter border-b border-white/10 pb-4">Skill Benchmark</h3>
+            <div className="space-y-6">
               {[
                 { label: 'Academic Tone', val: 85, color: '#FACC15', icon: '📖' },
                 { label: 'Sentence Variety', val: 70, color: '#2563EB', icon: '🔀' },
                 { label: 'Logical Flow', val: 90, color: '#059669', icon: '🌊' },
                 { label: 'Response Depth', val: 60, color: '#E11D48', icon: '🕳️' }
               ].map((s, i) => (
-                <div key={i} className="space-y-3">
-                  <div className="flex justify-between items-center font-black text-[10px] uppercase tracking-widest">
+                <div key={i} className="space-y-2">
+                  <div className="flex justify-between items-center font-bold text-[10px] uppercase tracking-wider">
                     <div className="flex items-center gap-2">
                       <span className="text-base">{s.icon}</span>
                       <span>{s.label}</span>
@@ -171,7 +170,7 @@ export const TestSummaryPage: React.FC<TestSummaryPageProps> = ({ result, onDash
                       <span className="bg-white/10 px-2 py-0.5 rounded text-[8px]">{getPerformanceLevel(s.val).label}</span>
                     </div>
                   </div>
-                  <div className="h-3 bg-white/10 rounded-full border-2 border-white/20 overflow-hidden group">
+                  <div className="h-2.5 bg-white/10 rounded-full border border-white/20 overflow-hidden">
                     <div className="h-full transition-all duration-700 delay-300" style={{ width: `${s.val}%`, backgroundColor: s.color }}></div>
                   </div>
                 </div>
@@ -179,17 +178,17 @@ export const TestSummaryPage: React.FC<TestSummaryPageProps> = ({ result, onDash
             </div>
           </div>
 
-          <div className="flex flex-col justify-center space-y-8">
-            <h2 className="text-5xl font-black tracking-tighter leading-none italic uppercase">Next <br/><span className="text-[#E11D48]">Level Up.</span></h2>
+          <div className="flex flex-col justify-center space-y-6">
+            <h2 className="text-4xl font-black tracking-tighter leading-none italic uppercase">Next <span className="text-[#E11D48]">Level Up.</span></h2>
             <div className="space-y-4">
               {recommendations.map((rec, i) => (
-                <div key={i} className="brutalist-card bg-white p-6 rounded-2xl flex items-center justify-between group hover:bg-gray-50 transition-all border-2 border-black">
+                <div key={i} className="bg-white p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000] flex items-center justify-between group hover:bg-gray-50 transition-all">
                   <div>
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded border border-black mb-2 inline-block" style={{ color: rec.color }}>{rec.tag}</span>
-                    <h4 className="text-xl font-black uppercase tracking-tight">{rec.title}</h4>
-                    <p className="text-sm font-bold text-gray-400">{rec.desc}</p>
+                    <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded border border-black mb-1 inline-block" style={{ color: rec.color }}>{rec.tag}</span>
+                    <h4 className="text-lg font-black uppercase tracking-tight">{rec.title}</h4>
+                    <p className="text-sm font-medium text-gray-400">{rec.desc}</p>
                   </div>
-                  <button onClick={() => onNavigate('detail')} className="w-12 h-12 rounded-full border-2 border-black flex items-center justify-center font-black group-hover:bg-black group-hover:text-white transition-colors">
+                  <button onClick={() => onNavigate('detail')} className="w-10 h-10 rounded-full border-2 border-black flex items-center justify-center font-bold group-hover:bg-black group-hover:text-white transition-colors">
                     →
                   </button>
                 </div>
@@ -199,16 +198,16 @@ export const TestSummaryPage: React.FC<TestSummaryPageProps> = ({ result, onDash
         </div>
 
         {/* Footer Actions */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+        <div className="flex flex-col sm:flex-row gap-5 justify-center">
           <button 
             onClick={onRetake}
-            className="brutalist-btn bg-white text-black px-12 py-5 rounded-full font-black text-xl hover:scale-105 transition-transform"
+            className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg border-3 border-black shadow-[5px_5px_0px_#000] hover:shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
           >
             RETAKE TEST
           </button>
           <button 
             onClick={onDashboard}
-            className="brutalist-btn bg-black text-white px-12 py-5 rounded-full font-black text-xl hover:scale-105 transition-transform"
+            className="bg-black text-white px-10 py-4 rounded-full font-bold text-lg border-3 border-black shadow-[5px_5px_0px_#000] hover:shadow-[3px_3px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
           >
             BACK TO DASHBOARD
           </button>
